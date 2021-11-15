@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+h1, h2, h3, p, div, table, button{
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+}
+
+div.alert {
+    width: 310px;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-bottom: 2px solid lightgray;
+}
+div.guthaben {
+    width: 310px;
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+}
+div.verlauf {
+    width: 310px;
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+}
+div.winPlan {
+    position: relative;
+    right: auto;
+    max-width: 300px;
+    min-height: 400px;
+    background-color: red;
+}
+
+p.green {
+    color: green;
+}
+p.red {
+    color: red;
+}
+
+table {
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 3px solid lightgray;
+}
+
+td {
+    min-width: 100px;
+}
+
+button.spin {
+    border: none;
+    border-top: 1px solid lightgray;
+    background-color: rgba(0, 0, 0, 0);
+    width: 100%;
+}
