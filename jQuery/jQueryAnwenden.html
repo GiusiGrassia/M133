@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <title>jQuery Anwenden</title>
+    <meta charset="utf-8" />
+    <style>
+        .red {
+            color: red;
+        }
+        
+        .blue {
+            color: blue;
+        }
+        
+        .green {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <h1>Dies ist die erste Überschrift</h1>
+        <h2 class="blue">Dies ist die zweite Überschrift in Blau</h2>
+        <h2 class="green">Dies ist die zweite Überschrift in Grün</h2>
+        <h3 id="first" class="green">Dies ist die dritte Überschrift</h3>
+        <h3 id="second">Dies ist die dritte Überschrift</h3>
+        <p>Ich bin ein Paragraph</p>
+        <p>Ich bin der zweite Paragraph</p>
+        <ul>
+            <li id="one">erster Listenpunkt</li>
+            <li id="two">zweiter Listenpunkt</li>
+            <li id="three">dritter Listenpunkt</li>
+        </ul>
+        <form id="addItem" action="" method="Post">
+            <input type="text" name="listItem" placeholder="Neuer Listeneintrag" required />
+            <input type="submit" name="submit" id="submit" />
+        </form>
+        <div id="message"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
