@@ -1,6 +1,16 @@
 //DOM ready - Shorthand
 $(document).ready(function() {
 
+    function loadDate() {
+        var a = moment('2016-01-01');
+        var b = a.add(1, 'week');
+        a.format();
+
+        console.log(a);
+    };
+
+    loadDate();
+
     // Ajax Request Berufsgruppe
     $.ajax({
         type: "GET",
