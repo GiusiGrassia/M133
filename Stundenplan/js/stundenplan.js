@@ -2,11 +2,7 @@
 $(document).ready(function() {
 
     function loadDate() {
-        var a = moment('2016-01-01');
-        var b = a.add(1, 'week');
-        a.format();
 
-        console.log(a);
     };
 
     loadDate();
@@ -76,12 +72,12 @@ $(document).ready(function() {
     function load_stundenplan(klasse_id) {
         $.ajax({
             type: "GET",
-            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id,
+            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id, //+ '&woche=51-2021'
             data: { format: 'json' }, // format und id mitgeben
             dataType: 'json'
         }).done(function(data) {
             // wenn  Daten vorhanden sind ...
-            if (data !== '') {
+            if (data != '') {
                 // Tabelle generieren - Bootstrap Table
                 $('#stundenplan').append('<table class="table"><tr><th>Datum</th><th>Wochentag</th><th>Von</th><th>Bis</th><th>Lehrer</th><th>Fach</th><th>Longfach</th><th>Raum</th><th>Kommentar</th></tr></table>');
                 // Loop über JSON
@@ -101,7 +97,7 @@ $(document).ready(function() {
                 })
             } else {
                 // Fehlermeldung ausgeben - Bootstrap alert Box
-                $('#stundenplan').html('<div class="alert alert-warning">Wählen Sie eine Filiale aus ...</div>');
+                $('#stundenplan').html('<div class="alert alert-warning text-center">Es wurden in dieser Woche keine Daten gefunden.<br>Evtl. findet in dieser Woche kein Unterricht statt, oder es wurden für diesen Zeitraum noch keine Daten eingegeben.</div>');
             }
         }).fail(function() {
             // Fehlermeldung ausgeben - Bootstrap alert Box
