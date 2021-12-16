@@ -79,7 +79,7 @@ $(document).ready(function() {
             // wenn  Daten vorhanden sind ...
             if (data != '') {
                 // Tabelle generieren - Bootstrap Table
-                $('#stundenplan').append('<table class="table"><tr><th>Datum</th><th>Wochentag</th><th>Von</th><th>Bis</th><th>Lehrer</th><th>Fach</th><th>Longfach</th><th>Raum</th><th>Kommentar</th></tr></table>');
+                $('#stundenplan').append('<table class="table"><tr><th>Datum</th><th>Wochentag</th><th>Von</th><th>Bis</th><th>Lehrer</th><th>Fach</th><th>Raum</th></tr></table>');
                 // Loop über JSON
                 $.each(data, function(key, tafel) {
 
@@ -90,9 +90,7 @@ $(document).ready(function() {
                         '</td><td>' + tafel.tafel_bis +
                         '</td><td>' + tafel.tafel_lehrer +
                         '</td><td>' + tafel.tafel_fach +
-                        '</td><td>' + tafel.tafel_longfach +
                         '</td><td>' + tafel.tafel_raum +
-                        '</td><td>' + tafel.tafel_kommentar +
                         '</td></tr>');
                 })
             } else {
