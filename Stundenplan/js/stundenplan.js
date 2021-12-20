@@ -1,12 +1,6 @@
 //DOM ready - Shorthand
 $(document).ready(function() {
 
-    function loadDate() {
-
-    };
-
-    loadDate();
-
     // Ajax Request Berufsgruppe
     $.ajax({
         type: "GET",
@@ -72,7 +66,7 @@ $(document).ready(function() {
     function load_stundenplan(klasse_id) {
         $.ajax({
             type: "GET",
-            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id, //+ '&woche=51-2021'
+            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=50-2021',
             data: { format: 'json' }, // format und id mitgeben
             dataType: 'json'
         }).done(function(data) {
@@ -102,4 +96,22 @@ $(document).ready(function() {
             $('#stundenplan').html('<div class="alert alert-danger">Fehler ... </div>');
         });
     };
+
+    displayWeek = "";
+
+    function nextWeek(displayWeek) {
+
+        console.log(displayWeek);
+
+        var thisWeek = moment().format('W');
+        console.log('Step 1 - ' + thisWeek);
+
+        return displayWeek = thisWeek;
+    };
+
+    document.getElementById("nextW").addEventListener("click", function() {
+        nextWeek();
+    });
+
+
 });
