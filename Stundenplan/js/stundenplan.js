@@ -1,6 +1,6 @@
 //DOM ready - Shorthand
 $(document).ready(function() {
-
+    moment.locale('de-CH');
     let actualDate = moment();
 
     //Mittlere Pagination Anzeige
@@ -41,13 +41,16 @@ $(document).ready(function() {
         data: { format: 'JSON' }, // format mitgeben
         dataType: 'json'
     }).done(function(data) {
-        // leere Option einfügen
+        // "Ihre Auswahl" Option einfügen
         $('#berufsgruppe').append('<option>Ihre Auswahl ... </option>');
         // loop über JSON-Array
         $.each(data, function(key, berufe) {
             // Optionen anhängen
             $('#berufsgruppe').append('<option value=' + berufe.beruf_id + '>' + berufe.beruf_name + '</option>');
         })
+        if(localStorage.getItem('savedBeruf') !== undefined){
+            $('#berufsgruppe').val(localStorage.getItem('savedBeruf')).change();
+        }
     }).fail(function() {
         // Fehlermeldung ausgeben - Bootstrap alert Box
         $('#stundenplan').html('<div class="alert alert-danger">Fehler ... </div>');
@@ -56,8 +59,11 @@ $(document).ready(function() {
     // Change Handler Berufsgruppe
     $('#berufsgruppe').change(function(e) {
 
+        //Localstorage Key "savedBeruf" mit der Beruf ID speichern.
+        localStorage.setItem('savedBeruf', this.value);
+
         // Klassenauswahl leeren
-       clearKlassenauswahl();
+        clearKlassenauswahl();
 
         // Stundenplan leeren
         clearStundenplan();
@@ -82,6 +88,9 @@ $(document).ready(function() {
                 // Optionen anhängen
                 $('#klassenauswahl').append('<option value=' + klasse.klasse_id + '>' + klasse.klasse_name + '</option>');
             })
+            if(localStorage.getItem('savedKlasse') !== undefined){
+                $('#klassenauswahl').val(localStorage.getItem('savedKlasse')).change();
+            }
         }).fail(function() {
             // Fehlermeldung ausgeben - Bootstrap alert Box
             $('#stundenplan').html('<div class="alert alert-danger">Fehler ... </div>');
@@ -90,6 +99,9 @@ $(document).ready(function() {
 
     // Change Handler Klassenwahl
     $('#klassenauswahl').change(function(e) {
+
+        //Localstorage Key "savedKlasse" mit der Klassen ID speichern.
+        localStorage.setItem('savedKlasse', this.value);
 
         // Stundenplan leeren
         clearStundenplan();
@@ -114,10 +126,10 @@ $(document).ready(function() {
                 $.each(data, function(key, tafel) {
 
                     // Tabellenzeilen anfügen   
-                    $('#stundenplan table').append('<tr><td>' + tafel.tafel_datum +
-                        '</td><td>' + tafel.tafel_wochentag +
-                        '</td><td>' + tafel.tafel_von +
-                        '</td><td>' + tafel.tafel_bis +
+                    $('#stundenplan table').append('<tr><td>' + moment(tafel.tafel_datum, 'YYYY-MM-DD').format('DD.MM.YYYY') +
+                        '</td><td>' + moment(tafel.tafel_wochentag, 'd').format('dddd') +
+                        '</td><td>' + moment(tafel.tafel_von, 'hh:mm:ss').format('hh:mm') +
+                        '</td><td>' + moment(tafel.tafel_bis, 'hh:mm:ss').format('hh:mm') +
                         '</td><td>' + tafel.tafel_lehrer +
                         '</td><td>' + tafel.tafel_fach +
                         '</td><td>' + tafel.tafel_raum +
