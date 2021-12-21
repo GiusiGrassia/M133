@@ -22,8 +22,17 @@ $(document).ready(function() {
     };
 
     //Aufruf Funktion "weekPagination"
-    weekPagination();
+    weekPagination();  
 
+    //Funktion zum leeren der Klassenauswahl
+    function clearKlassenauswahl() {
+        $('#klassenauswahl').empty();
+    };
+
+    //Funktion zum leeren des Stundenplans
+    function clearStundenplan() {
+        $('#stundenplan').empty();
+    };
 
     // Ajax Request Berufsgruppe
     $.ajax({
@@ -46,12 +55,14 @@ $(document).ready(function() {
 
     // Change Handler Berufsgruppe
     $('#berufsgruppe').change(function(e) {
-        console.log(this.value);
-        // Klassenauswahl leeren
-        $('#klassenauswahl').empty();
-        // Stundenplan leeren
-        $('#stundenplan').empty();
 
+        // Klassenauswahl leeren
+       clearKlassenauswahl();
+
+        // Stundenplan leeren
+        clearStundenplan();
+
+        //Klassenauswahl laden    
         load_klassenauswahl(this.value);
 
     });
@@ -79,10 +90,11 @@ $(document).ready(function() {
 
     // Change Handler Klassenwahl
     $('#klassenauswahl').change(function(e) {
-        console.log(this.value);
-        // Stundenplan leeren
-        $('#stundenplan').empty();
 
+        // Stundenplan leeren
+        clearStundenplan();
+
+        // Stundenplan laden
         loadStundenplan(this.value);
     });
 
@@ -121,21 +133,26 @@ $(document).ready(function() {
         });
     };
 
+    //Event Handler um eine Woche vorher anzuzeigen
     document.getElementById('prevW').addEventListener('click', function() {
         weekBackward();
-        console.log(this.value);
-        loadStundenplan(this.value);
+        clearStundenplan();
+        loadStundenplan($('#klassenauswahl').val());
     });
 
+    //Event Handler um eine Woche nachher anzuzeigen
     document.getElementById('nextW').addEventListener('click', function() {
         weekForward();
-        console.log(this.value);
-        loadStundenplan(this.value);
+        clearStundenplan();
+        loadStundenplan($('#klassenauswahl').val());
     });
 
+    //Event Handler um die aktuelle Woche anzuzeigen
     document.getElementById('currW').addEventListener('click', function() {
         actualDate = moment();
         weekPagination();
+        clearStundenplan();
+        loadStundenplan($('#klassenauswahl').val());
     });
 
 
