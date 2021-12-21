@@ -6,7 +6,7 @@ $(document).ready(function() {
     //Mittlere Pagination Anzeige
     function weekPagination() {
         currentWeek = actualDate.format('W') + '-' + actualDate.format('Y');
-        document.getElementById('currW').innerHTML = '<a class="page-link">' + currentWeek + '</a>';
+        $('#currW').html('<a class="page-link">' + currentWeek + '</a>');
     };
 
     //Woche vorwärts
@@ -134,21 +134,21 @@ $(document).ready(function() {
     };
 
     //Event Handler um eine Woche vorher anzuzeigen
-    document.getElementById('prevW').addEventListener('click', function() {
+    $('#prevW').click(function(e){
         weekBackward();
         clearStundenplan();
         loadStundenplan($('#klassenauswahl').val());
     });
 
     //Event Handler um eine Woche nachher anzuzeigen
-    document.getElementById('nextW').addEventListener('click', function() {
+    $('#nextW').click(function(e){
         weekForward();
         clearStundenplan();
         loadStundenplan($('#klassenauswahl').val());
     });
 
     //Event Handler um die aktuelle Woche anzuzeigen
-    document.getElementById('currW').addEventListener('click', function() {
+    $('#currW').click(function(e){
         actualDate = moment();
         weekPagination();
         clearStundenplan();
