@@ -1,6 +1,35 @@
 //DOM ready - Shorthand
 $(document).ready(function() {
 
+    let actualDate = moment();
+
+    //Mittlere Pagination Anzeige
+    function weekPagination() {
+        currentWeek = actualDate.format('W') + '-' + actualDate.format('Y');
+        document.getElementById('currW').innerHTML = '<a class="page-link">' + currentWeek + '</a>';
+    };
+
+    function weekForward() {
+        actualDate = actualDate.add(1, 'W');
+        weekPagination();
+    };
+
+    function weekBackward() {
+        actualDate = actualDate.subtract(1, 'W');
+        weekPagination();
+    };
+
+    weekPagination();
+
+
+    document.getElementById("prevW").addEventListener("click", function() {
+        weekBackward();
+    });
+
+    document.getElementById("nextW").addEventListener("click", function() {
+        weekForward();
+    });
+
     // Ajax Request Berufsgruppe
     $.ajax({
         type: "GET",
@@ -66,7 +95,7 @@ $(document).ready(function() {
     function load_stundenplan(klasse_id) {
         $.ajax({
             type: "GET",
-            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=50-2021',
+            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=' + currentWeek.format('W') + '-2021',
             data: { format: 'json' }, // format und id mitgeben
             dataType: 'json'
         }).done(function(data) {
@@ -96,22 +125,5 @@ $(document).ready(function() {
             $('#stundenplan').html('<div class="alert alert-danger">Fehler ... </div>');
         });
     };
-
-    displayWeek = "";
-
-    function nextWeek(displayWeek) {
-
-        console.log(displayWeek);
-
-        var thisWeek = moment().format('W');
-        console.log('Step 1 - ' + thisWeek);
-
-        return displayWeek = thisWeek;
-    };
-
-    document.getElementById("nextW").addEventListener("click", function() {
-        nextWeek();
-    });
-
 
 });
