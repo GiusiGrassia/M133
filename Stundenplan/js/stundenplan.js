@@ -9,26 +9,21 @@ $(document).ready(function() {
         document.getElementById('currW').innerHTML = '<a class="page-link">' + currentWeek + '</a>';
     };
 
+    //Woche vorwärts
     function weekForward() {
         actualDate = actualDate.add(1, 'W');
         weekPagination();
     };
 
+    //Woche rückwärts
     function weekBackward() {
         actualDate = actualDate.subtract(1, 'W');
         weekPagination();
     };
 
+    //Aufruf Funktion "weekPagination"
     weekPagination();
 
-
-    document.getElementById("prevW").addEventListener("click", function() {
-        weekBackward();
-    });
-
-    document.getElementById("nextW").addEventListener("click", function() {
-        weekForward();
-    });
 
     // Ajax Request Berufsgruppe
     $.ajax({
@@ -88,14 +83,14 @@ $(document).ready(function() {
         // Stundenplan leeren
         $('#stundenplan').empty();
 
-        load_stundenplan(this.value);
+        loadStundenplan(this.value);
     });
 
     // Ajax Request Stundenplan
-    function load_stundenplan(klasse_id) {
+    function loadStundenplan(klasse_id) {
         $.ajax({
             type: "GET",
-            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=' + currentWeek.format('W') + '-2021',
+            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=' + actualDate.format('W') + '-' + actualDate.format('Y'),
             data: { format: 'json' }, // format und id mitgeben
             dataType: 'json'
         }).done(function(data) {
@@ -122,8 +117,26 @@ $(document).ready(function() {
             }
         }).fail(function() {
             // Fehlermeldung ausgeben - Bootstrap alert Box
-            $('#stundenplan').html('<div class="alert alert-danger">Fehler ... </div>');
+            $('#stundenplan').html('<div class="alert alert-danger">Fehler XYZ </div>');
         });
     };
+
+    document.getElementById('prevW').addEventListener('click', function() {
+        weekBackward();
+        console.log(this.value);
+        loadStundenplan(this.value);
+    });
+
+    document.getElementById('nextW').addEventListener('click', function() {
+        weekForward();
+        console.log(this.value);
+        loadStundenplan(this.value);
+    });
+
+    document.getElementById('currW').addEventListener('click', function() {
+        actualDate = moment();
+        weekPagination();
+    });
+
 
 });
