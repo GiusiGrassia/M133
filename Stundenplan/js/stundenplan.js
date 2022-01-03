@@ -32,6 +32,8 @@ $(document).ready(function() {
     //Funktion zum leeren des Stundenplans
     function clearStundenplan() {
         $('#stundenplan').empty();
+        $('#emptySchedule').empty();
+        $('#error').empty();
     };
 
     // Ajax Request Berufsgruppe
@@ -53,7 +55,7 @@ $(document).ready(function() {
         }
     }).fail(function() {
         // Fehlermeldung ausgeben - Bootstrap alert Box
-        $('#stundenplan').html('<div class="alert alert-danger">Fehler ... </div>');
+        $('#error').html('<div class="alert alert-danger">Fehler...</div>').fadeIn();
     });
 
     // Change Handler Berufsgruppe
@@ -93,7 +95,7 @@ $(document).ready(function() {
             }
         }).fail(function() {
             // Fehlermeldung ausgeben - Bootstrap alert Box
-            $('#stundenplan').html('<div class="alert alert-danger">Fehler ... </div>');
+            $('#error').html('<div class="alert alert-danger">Fehler...</div>').fadeIn();
         });
     };
 
@@ -112,36 +114,40 @@ $(document).ready(function() {
 
     // Ajax Request Stundenplan
     function loadStundenplan(klasse_id) {
-        $.ajax({
-            type: "GET",
-            url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=' + actualDate.format('W') + '-' + actualDate.format('Y'),
-            data: { format: 'json' }, // format und id mitgeben
-            dataType: 'json'
-        }).done(function(data) {
-            // wenn  Daten vorhanden sind ...
-            if (data != '') {
-                // Tabelle generieren - Bootstrap Table
-                $('#stundenplan').append('<table class="table"><tr><th>Datum</th><th>Wochentag</th><th>Von</th><th>Bis</th><th>Lehrer</th><th>Fach</th><th>Raum</th></tr></table>');
-                // Loop über JSON
-                $.each(data, function(key, tafel) {
+        $('#stundenplan').fadeOut(function(){
+            $.ajax({
+                type: "GET",
+                url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=' + actualDate.format('W') + '-' + actualDate.format('Y'),
+                data: { format: 'json' }, // format und id mitgeben
+                dataType: 'json'
+            }).done(function(data) {
+                // wenn  Daten vorhanden sind ...
+                if (data != '') {
+                    // Tabelle generieren - Bootstrap Table
+                    $('#stundenplan').append('<table class="table"><tr><th>Datum</th><th>Wochentag</th><th>Von</th><th>Bis</th><th>Lehrer</th><th>Fach</th><th>Raum</th></tr></table>');
+                    // Loop über JSON
+                    $.each(data, function(key, tafel) {
 
-                    // Tabellenzeilen anfügen   
-                    $('#stundenplan table').append('<tr><td>' + moment(tafel.tafel_datum, 'YYYY-MM-DD').format('DD.MM.YYYY') +
-                        '</td><td>' + moment(tafel.tafel_wochentag, 'd').format('dddd') +
-                        '</td><td>' + moment(tafel.tafel_von, 'hh:mm:ss').format('hh:mm') +
-                        '</td><td>' + moment(tafel.tafel_bis, 'hh:mm:ss').format('hh:mm') +
-                        '</td><td>' + tafel.tafel_lehrer +
-                        '</td><td>' + tafel.tafel_fach +
-                        '</td><td>' + tafel.tafel_raum +
-                        '</td></tr>');
-                })
-            } else {
+                        // Tabellenzeilen anfügen   
+                        $('#stundenplan table').append('<tr><td>' + moment(tafel.tafel_datum, 'YYYY-MM-DD').format('DD.MM.YYYY') +
+                            '</td><td>' + moment(tafel.tafel_wochentag, 'd').format('dddd') +
+                            '</td><td>' + moment(tafel.tafel_von, 'hh:mm:ss').format('hh:mm') +
+                            '</td><td>' + moment(tafel.tafel_bis, 'hh:mm:ss').format('hh:mm') +
+                            '</td><td>' + tafel.tafel_lehrer +
+                            '</td><td>' + tafel.tafel_fach +
+                            '</td><td>' + tafel.tafel_raum +
+                            '</td></tr>');
+                            
+                        $('#stundenplan').fadeIn();
+                    })
+                } else {
+                    // Fehlermeldung ausgeben - Bootstrap alert Box
+                    $('#emptySchedule').html('<div class="alert alert-warning text-center">Es wurden in dieser Woche keine Daten gefunden.<br>Evtl. findet in dieser Woche kein Unterricht statt, oder es wurden für diesen Zeitraum noch keine Daten eingegeben.</div>').fadeIn();
+                }
+            }).fail(function() {
                 // Fehlermeldung ausgeben - Bootstrap alert Box
-                $('#stundenplan').html('<div class="alert alert-warning text-center">Es wurden in dieser Woche keine Daten gefunden.<br>Evtl. findet in dieser Woche kein Unterricht statt, oder es wurden für diesen Zeitraum noch keine Daten eingegeben.</div>');
-            }
-        }).fail(function() {
-            // Fehlermeldung ausgeben - Bootstrap alert Box
-            $('#stundenplan').html('<div class="alert alert-danger">Fehler XYZ </div>');
+                $('#error').html('<div class="alert alert-danger">Fehler...</div>').fadeIn();
+            });
         });
     };
 
