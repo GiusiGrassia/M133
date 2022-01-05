@@ -145,6 +145,19 @@ $(document).ready(function() {
                             '</td></tr>');
 
                         $('#stundenplan').fadeIn();
+                        /*
+                        var a1 = moment('19:50:00', 'hh:mm:ss').toISOString();
+                        var a2 = moment('20:00:00', 'hh:mm:ss').toISOString();
+                        var a3 = moment().toISOString();
+                        console.log(a1)
+                        console.log(a2)
+                        console.log(a3)
+                        if (a3 > a1) {
+                            console.log('Innerhalb')
+                        } else {
+                            console.log('ausserhalb')
+                        }
+                        */
                     })
                 } else {
                     // Fehlermeldung ausgeben - Bootstrap alert Box
