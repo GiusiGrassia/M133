@@ -22,7 +22,10 @@ $(document).ready(function() {
     };
 
     //Aufruf Funktion "weekPagination"
-    weekPagination();  
+    weekPagination();
+
+    //Berufsgruppe laden
+    loadBerufsgruppen();
 
     //Funktion zum leeren der Klassenauswahl
     function clearKlassenauswahl() {
@@ -37,26 +40,29 @@ $(document).ready(function() {
     };
 
     // Ajax Request Berufsgruppe
-    $.ajax({
-        type: "GET",
-        url: "http://sandbox.gibm.ch/berufe.php",
-        data: { format: 'JSON' }, // format mitgeben
-        dataType: 'json'
-    }).done(function(data) {
-        // "Ihre Auswahl" Option einfügen
-        $('#berufsgruppe').append('<option>Ihre Auswahl ... </option>');
-        // loop über JSON-Array
-        $.each(data, function(key, berufe) {
-            // Optionen anhängen
-            $('#berufsgruppe').append('<option value=' + berufe.beruf_id + '>' + berufe.beruf_name + '</option>');
-        })
-        if(localStorage.getItem('savedBeruf') !== undefined){
-            $('#berufsgruppe').val(localStorage.getItem('savedBeruf')).change();
-        }
-    }).fail(function() {
-        // Fehlermeldung ausgeben - Bootstrap alert Box
-        $('#error').html('<div class="alert alert-danger">Fehler...</div>').fadeIn();
-    });
+    function loadBerufsgruppen() {
+        $.ajax({
+            type: "GET",
+            url: "http://sandbox.gibm.ch/berufe.php",
+            data: { format: 'JSON' }, // format mitgeben
+            dataType: 'json'
+        }).done(function(data) {
+            // "Ihre Auswahl" Option einfügen
+            $('#berufsgruppe').append('<option>Ihre Auswahl ... </option>');
+            // loop über JSON-Array
+            $.each(data, function(key, berufe) {
+                // Optionen anhängen
+                $('#berufsgruppe').append('<option value=' + berufe.beruf_id + '>' + berufe.beruf_name + '</option>');
+            })
+            if (localStorage.getItem('savedBeruf') !== null) {
+                $('#berufsgruppe').val(localStorage.getItem('savedBeruf')).change();
+            }
+        }).fail(function() {
+            // Fehlermeldung - #001
+            $('#error').html('<div class="alert alert-danger">Error Code #001</div>').fadeIn();
+        });
+    }
+
 
     // Change Handler Berufsgruppe
     $('#berufsgruppe').change(function(e) {
@@ -90,12 +96,12 @@ $(document).ready(function() {
                 // Optionen anhängen
                 $('#klassenauswahl').append('<option value=' + klasse.klasse_id + '>' + klasse.klasse_name + '</option>');
             })
-            if(localStorage.getItem('savedKlasse') !== undefined){
+            if (localStorage.getItem('savedKlasse') !== null) {
                 $('#klassenauswahl').val(localStorage.getItem('savedKlasse')).change();
             }
         }).fail(function() {
-            // Fehlermeldung ausgeben - Bootstrap alert Box
-            $('#error').html('<div class="alert alert-danger">Fehler...</div>').fadeIn();
+            // Fehlermeldung - #002
+            $('#error').html('<div class="alert alert-danger">Error Code #002</div>').fadeIn();
         });
     };
 
@@ -114,7 +120,7 @@ $(document).ready(function() {
 
     // Ajax Request Stundenplan
     function loadStundenplan(klasse_id) {
-        $('#stundenplan').fadeOut(function(){
+        $('#stundenplan').fadeOut(function() {
             $.ajax({
                 type: "GET",
                 url: 'https://sandbox.gibm.ch/tafel.php?klasse_id=' + klasse_id + '&woche=' + actualDate.format('W') + '-' + actualDate.format('Y'),
@@ -137,7 +143,7 @@ $(document).ready(function() {
                             '</td><td>' + tafel.tafel_fach +
                             '</td><td>' + tafel.tafel_raum +
                             '</td></tr>');
-                            
+
                         $('#stundenplan').fadeIn();
                     })
                 } else {
@@ -145,28 +151,28 @@ $(document).ready(function() {
                     $('#emptySchedule').html('<div class="alert alert-warning text-center">Es wurden in dieser Woche keine Daten gefunden.<br>Evtl. findet in dieser Woche kein Unterricht statt, oder es wurden für diesen Zeitraum noch keine Daten eingegeben.</div>').fadeIn();
                 }
             }).fail(function() {
-                // Fehlermeldung ausgeben - Bootstrap alert Box
-                $('#error').html('<div class="alert alert-danger">Fehler...</div>').fadeIn();
+                // Fehlermeldung - #003
+                $('#error').html('<div class="alert alert-danger">Error Code #003</div>').fadeIn();
             });
         });
     };
 
     //Event Handler um eine Woche vorher anzuzeigen
-    $('#prevW').click(function(e){
+    $('#prevW').click(function(e) {
         weekBackward();
         clearStundenplan();
         loadStundenplan($('#klassenauswahl').val());
     });
 
     //Event Handler um eine Woche nachher anzuzeigen
-    $('#nextW').click(function(e){
+    $('#nextW').click(function(e) {
         weekForward();
         clearStundenplan();
         loadStundenplan($('#klassenauswahl').val());
     });
 
     //Event Handler um die aktuelle Woche anzuzeigen
-    $('#currW').click(function(e){
+    $('#currW').click(function(e) {
         actualDate = moment();
         weekPagination();
         clearStundenplan();
