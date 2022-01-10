@@ -3,8 +3,6 @@ $(document).ready(function() {
     moment.locale('de-CH');
     let actualDate = moment();
 
-    var clicked = false;
-
     //Mittlere Pagination Anzeige
     function weekPagination() {
         currentWeek = actualDate.format('W') + '-' + actualDate.format('Y');
@@ -155,7 +153,6 @@ $(document).ready(function() {
                             '</td></tr>');
 
                         $('#stundenplan').fadeIn();
-                        
                     })
                 } else {
                     // Fehlermeldung ausgeben - Bootstrap alert Box
@@ -187,9 +184,7 @@ $(document).ready(function() {
         actualDate = moment();
         weekPagination();
         clearStundenplan();
-        if (clicked == false) {
-            loadStundenplan($('#klassenauswahl').val());
-        };
+        loadStundenplan($('#klassenauswahl').val());
     });
 
 
