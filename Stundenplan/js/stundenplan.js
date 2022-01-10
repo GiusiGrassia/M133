@@ -3,6 +3,8 @@ $(document).ready(function() {
     moment.locale('de-CH');
     let actualDate = moment();
 
+    var clicked = false;
+
     //Mittlere Pagination Anzeige
     function weekPagination() {
         currentWeek = actualDate.format('W') + '-' + actualDate.format('Y');
@@ -32,6 +34,10 @@ $(document).ready(function() {
         $('#klassenauswahl').empty();
     };
 
+    function clearLocalStorageKeySavedClass() {
+        localStorage.removeItem('savedKlasse');
+    }
+
     //Funktion zum leeren des Stundenplans
     function clearStundenplan() {
         $('#stundenplan').empty();
@@ -55,7 +61,8 @@ $(document).ready(function() {
                 $('#berufsgruppe').append('<option value=' + berufe.beruf_id + '>' + berufe.beruf_name + '</option>');
             })
             if (localStorage.getItem('savedBeruf') !== null) {
-                $('#berufsgruppe').val(localStorage.getItem('savedBeruf')).change();
+                $('#berufsgruppe').val(localStorage.getItem('savedBeruf'));
+                load_klassenauswahl(localStorage.getItem('savedBeruf'));
             }
         }).fail(function() {
             // Fehlermeldung - #001
@@ -72,6 +79,8 @@ $(document).ready(function() {
 
         // Klassenauswahl leeren
         clearKlassenauswahl();
+
+        clearLocalStorageKeySavedClass();
 
         // Stundenplan leeren
         clearStundenplan();
@@ -94,10 +103,11 @@ $(document).ready(function() {
             // loop über JSON-Array
             $.each(data, function(key, klasse) {
                 // Optionen anhängen
-                $('#klassenauswahl').append('<option value=' + klasse.klasse_id + '>' + klasse.klasse_name + '</option>');
+                $('#klassenauswahl').append('<option value=' + klasse.klasse_id + '>' + klasse.klasse_longname + '</option>');
             })
             if (localStorage.getItem('savedKlasse') !== null) {
-                $('#klassenauswahl').val(localStorage.getItem('savedKlasse')).change();
+                $('#klassenauswahl').val(localStorage.getItem('savedKlasse'));
+                loadStundenplan(localStorage.getItem('savedKlasse'));
             }
         }).fail(function() {
             // Fehlermeldung - #002
@@ -137,27 +147,15 @@ $(document).ready(function() {
                         // Tabellenzeilen anfügen   
                         $('#stundenplan table').append('<tr><td>' + moment(tafel.tafel_datum, 'YYYY-MM-DD').format('DD.MM.YYYY') +
                             '</td><td>' + moment(tafel.tafel_wochentag, 'd').format('dddd') +
-                            '</td><td>' + moment(tafel.tafel_von, 'hh:mm:ss').format('hh:mm') +
-                            '</td><td>' + moment(tafel.tafel_bis, 'hh:mm:ss').format('hh:mm') +
+                            '</td><td>' + moment(tafel.tafel_von, 'hh:mm:ss').format('HH:mm') +
+                            '</td><td>' + moment(tafel.tafel_bis, 'hh:mm:ss').format('HH:mm') +
                             '</td><td>' + tafel.tafel_lehrer +
-                            '</td><td>' + tafel.tafel_fach +
+                            '</td><td>' + tafel.tafel_longfach +
                             '</td><td>' + tafel.tafel_raum +
                             '</td></tr>');
 
                         $('#stundenplan').fadeIn();
-                        /*
-                        var a1 = moment('19:50:00', 'hh:mm:ss').toISOString();
-                        var a2 = moment('20:00:00', 'hh:mm:ss').toISOString();
-                        var a3 = moment().toISOString();
-                        console.log(a1)
-                        console.log(a2)
-                        console.log(a3)
-                        if (a3 > a1) {
-                            console.log('Innerhalb')
-                        } else {
-                            console.log('ausserhalb')
-                        }
-                        */
+                        
                     })
                 } else {
                     // Fehlermeldung ausgeben - Bootstrap alert Box
@@ -189,7 +187,9 @@ $(document).ready(function() {
         actualDate = moment();
         weekPagination();
         clearStundenplan();
-        loadStundenplan($('#klassenauswahl').val());
+        if (clicked == false) {
+            loadStundenplan($('#klassenauswahl').val());
+        };
     });
 
 
